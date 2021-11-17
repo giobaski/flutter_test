@@ -1,46 +1,6 @@
-import 'dart:async';
-import 'dart:convert';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
-
-Future<Random> fetchRandom() async {
-  final response = await http.get(Uri.parse('csrng.net/csrng/csrng.php?min=1&max=1000'));
-
-  // var jsondata = jsonDecode(response.body);
-  // print(jsondata);
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Random.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load random');
-  }
-
-
-  // final response = await http.get(Uri.https('csrng.net', '/csrng/csrng.php'));
-
-  print('dsdsds');
-}
-
-
-class Random {
-  final int random;
-
-  Random({
-    required this.random,
-  });
-
-  factory Random.fromJson(Map<String, dynamic> json) {
-    return Random(
-      random: json['random']
-    );
-  }
-}
+import 'package:flutter_test_project/random_api.dart';
 
 void main() => runApp(const MyApp());
 
@@ -52,14 +12,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<Random> futureRandom;
+  int randomNumber = 0;
+  List<int> prevNumbers = [];
 
-
-  @override
-  void initState() {
-    super.initState();
-    futureRandom = fetchRandom();
+  getRandom () async {
+    int _randomNumber = await RandomApi.fetchRandom();
+    setState((){
+      randomNumber = _randomNumber;
+      prevNumbers.add(randomNumber);
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,24 +34,51 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Random Numbers'),
+          backgroundColor: Colors.green,
         ),
         body: Center(
-          child: FutureBuilder<Random>(
-            future: futureRandom,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.random.toString());
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: ElevatedButton(
+                    onPressed: getRandom,
+                    child: Text("Get A New Random Number"),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                    ),
+                ),
+              ),
 
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
+              Text('$randomNumber',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold
+                )
+              ),
+
+              SizedBox(height: 40),
+
+              Text('Previous Numbers',
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold
+                  )
+              ),
+
+              ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: prevNumbers.length,
+                  itemBuilder: (BuildContext ctxt, int index){
+                    return Center(child: Text('${prevNumbers[index]}'));
+                  }
+              )
+
+            ],
+          )
         ),
         ),
-      ),
-    );
+      );
   }
 }
