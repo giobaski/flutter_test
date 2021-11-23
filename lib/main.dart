@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_test_project/my_shared_preferences.dart';
 import 'package:flutter_test_project/random_api.dart';
+
 
 void main() => runApp(const MyApp());
 
@@ -13,16 +15,23 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int randomNumber = 0;
-  List<int> prevNumbers = [];
+  List<String> prevNumbers = [];
+
 
   getRandom () async {
     int _randomNumber = await RandomApi.fetchRandom();
     setState((){
       randomNumber = _randomNumber;
-      prevNumbers.add(randomNumber);
+      prevNumbers.add(randomNumber.toString());
     });
+    MySharedPrefernces.setPrevNumbers(prevNumbers);
   }
 
+
+  @override
+  void initState() {
+    MySharedPrefernces.init();
+  }
 
   @override
   Widget build(BuildContext context) {
