@@ -1,5 +1,5 @@
 ## Expensio
-Money manager: easy and user-friendly mobile application for tracking of your daily expenses.
+Easy and user-friendly mobile application for tracking of your daily expenses.
 
 ## Build
 
