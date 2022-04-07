@@ -7,7 +7,7 @@ Steps to run the app:
 1. git clone https://github.com/giobaski/expensio.git
 2. flutter run
 
-The application's been built using **Flutter** (SDK version: 2.5.1 Dart: 2.14.2)
+**Note!** The application's been built using **Flutter** (SDK version: 2.5.1 Dart: 2.14.2)
 
 # Screens of Expensio App
 
