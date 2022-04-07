@@ -1,7 +1,10 @@
-## Additional Feature:
+## Expensio
+Money manager: easy and user-friendly mobile application for tracking of your daily expenses.
+
+## Build
 
 Steps to run the app:
-1. clone https://github.com/giobaski/expensio.git
+1. git clone https://github.com/giobaski/expensio.git
 2. flutter run
 
 The application's been built using **Flutter** (SDK version: 2.5.1 Dart: 2.14.2)
